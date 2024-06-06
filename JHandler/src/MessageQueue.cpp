@@ -42,12 +42,12 @@ std::unique_ptr<Message> MessageQueue::next() {
 
 void MessageQueue::removeMessage(int32_t what) {
     std::unique_lock<std::mutex> lock(mMutex);
-    Log::i(TAG, "MessageQueue remove message. what=.", what);
+    Log::i(TAG, "MessageQueue remove message. what=", what);
     for (auto it = mQueue.begin(); it != mQueue.end();) {
         if ((*it)->what == what) {
+            Log::i(TAG, "MessageQueue has been removed message. message=", **it);
             it = mQueue.erase(it);
             // 【Message 回收】 可以考虑将 message 回收
-            Log::i(TAG, "MessageQueue has been removed message. message=.", **it);
         } else {
             ++it;
         }
