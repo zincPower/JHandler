@@ -16,17 +16,17 @@ public:
 
     template<typename T, typename... Args>
     static void i(const T &tag, const Args &...args) {
-        if(!isNeedShowLog) return;
+        if (!isNeedShowLog) return;
         std::ostringstream os;
-        os << "【" << tag << "】 ";
+        os << "Info:【" << tag << "】 ";
         i(os, args...);
     }
 
     template<typename T, typename... Args>
     static void e(const T &tag, const Args &...args) {
-        if(!isNeedShowLog) return;
+        if (!isNeedShowLog) return;
         std::ostringstream os;
-        os << "【" << tag << "】 ";
+        os << "Error: 【" << tag << "】 ";
         e(os, args...);
     }
 
@@ -44,8 +44,8 @@ private:
     }
 
     static void i(std::ostringstream &os) {
-        std::string msg = os.str();
-        std::cout << "Info: " << os.str() << std::endl;
+        os << "\n";
+        std::cout << os.str() << std::flush;
     }
 
     template<typename T, typename... Args>
@@ -61,8 +61,8 @@ private:
     }
 
     static void e(std::ostringstream &os) {
-        std::string msg = os.str();
-        std::cout << "Error: " << os.str() << std::endl;
+        os << "\n";
+        std::cout << os.str() << std::flush;
     }
 };
 }

@@ -8,6 +8,10 @@
 namespace jhandler {
 const std::string HandlerThread::TAG = "HandlerThread";
 
+std::shared_ptr<HandlerThread> HandlerThread::create() {
+    return std::shared_ptr<HandlerThread>(new HandlerThread());
+}
+
 HandlerThread::HandlerThread() : mLooper(Looper::create()) {
     Log::i(TAG, "Create handler thread.");
 }
@@ -30,6 +34,9 @@ void HandlerThread::start() {
 void HandlerThread::quit() {
     Log::i(TAG, "Quit handler thread.");
     mLooper->quit();
+    if (mThread.joinable()) {
+        mThread.detach();
+    }
 }
 
 std::shared_ptr<Looper> HandlerThread::getLooper() {
@@ -38,20 +45,8 @@ std::shared_ptr<Looper> HandlerThread::getLooper() {
 
 void HandlerThread::loop(std::shared_ptr<Looper> looper) {
     auto threadId = std::this_thread::get_id();
-    Log::i(TAG, "Loop launch. Thread id=", threadId);
+    Log::i(TAG, "Loop launch. Looper thread id=", threadId);
     looper->loop();
-    Log::i(TAG, "Loop quit. Thread id=", threadId);
-}
-
-void HandlerThread::join() {
-    if (mThread.joinable()) {
-        mThread.join();
-    }
-}
-
-void HandlerThread::detach() {
-    if (mThread.joinable()) {
-        mThread.detach();
-    }
+    Log::i(TAG, "Loop quit. Looper thread id=", threadId);
 }
 }

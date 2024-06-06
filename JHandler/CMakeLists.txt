@@ -5,8 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_executable(
+add_library(
         JHandler
+        SHARED
         src/Handler.cpp
         src/HandlerThread.cpp
         src/Looper.cpp

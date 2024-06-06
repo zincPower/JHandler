@@ -17,7 +17,7 @@ private:
     std::thread mThread{};
     std::shared_ptr<Looper> mLooper = nullptr;
 public:
-    HandlerThread();
+    static std::shared_ptr<HandlerThread> create();
 
     ~HandlerThread();
 
@@ -27,11 +27,9 @@ public:
 
     std::shared_ptr<Looper> getLooper();
 
-    void join();
-
-    void detach();
-
 private:
+    HandlerThread();
+
     static void loop(std::shared_ptr<Looper> looper);
 };
 }
