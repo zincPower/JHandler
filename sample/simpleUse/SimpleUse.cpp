@@ -91,6 +91,8 @@ void simpleUse() {
     this_thread::sleep_for(std::chrono::microseconds (50));
     handler->removeAllMessages();
 
+    // TODO 多个 handler
+
     // HandlerThread 进行 quit ，采取线程 detach ，所以并不会让当前线程等待 HandlerThread 内部线程退出完成在执行后续代码
     // 所以此处进行睡眠 2 秒，否则整个程序快速退出，会导致没有看到内部执行
     this_thread::sleep_for(std::chrono::seconds(2));

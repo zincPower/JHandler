@@ -10,6 +10,7 @@ add_executable(
         JHandler-Demo
         sample/main.cpp
         sample/simpleUse/SimpleUse.cpp
+        sample/diyThread/DiyThread.cpp
 )
 
 target_link_libraries(JHandler-Demo PUBLIC JHandler)

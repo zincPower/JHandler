@@ -2,6 +2,7 @@
 #include <string>
 #include "Log.h"
 #include "simpleUse/SimpleUse.h"
+#include "diyThread/DiyThread.h"
 
 using namespace std;
 using namespace jhandler;
@@ -13,7 +14,9 @@ int main() {
 
     simpleUse();
 
-    Log::i(TAG, "================================== 结束 demo =================================="," 主线程 id=", this_thread::get_id());
+    diyThread();
+
+    Log::i(TAG, "================================== 结束 demo ==================================", " 主线程 id=", this_thread::get_id());
     return 0;
 }
 
