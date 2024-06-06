@@ -6,7 +6,7 @@
 #include "Handler.h"
 #include "Log.h"
 
-namespace jhandler{
+namespace jhandler {
 const std::string Looper::TAG = "Looper";
 
 std::shared_ptr<Looper> Looper::create() {
@@ -15,7 +15,7 @@ std::shared_ptr<Looper> Looper::create() {
 
 void Looper::loop() {
     Log::i(TAG, "Start loop.");
-    
+
     while (true) {
         // 这里会将所有的任务都处理完成了才退出
         auto message = mQueue->next();
@@ -53,12 +53,12 @@ void Looper::enqueueMessage(std::unique_ptr<Message> message) {
     mQueue->enqueueMessage(std::move(message));
 }
 
-void Looper::removeMessage(int32_t what) {
-    mQueue->removeMessage(what);
+void Looper::removeMessage(std::shared_ptr<Handler> handler, int32_t what) {
+    mQueue->removeMessage(handler, what);
 }
 
-void Looper::removeAllMessages() {
-    mQueue->removeAllMessages();
+void Looper::removeAllMessages(std::shared_ptr<Handler> handler) {
+    mQueue->removeAllMessages(handler);
 }
 
 Looper::Looper() {

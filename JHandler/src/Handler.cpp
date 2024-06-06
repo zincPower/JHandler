@@ -35,10 +35,10 @@ void Handler::sendMessage(std::unique_ptr<Message> message) {
 }
 
 void Handler::removeMessage(int32_t what) {
-    mLooper->removeMessage(what);
+    mLooper->removeMessage(shared_from_this(), what);
 }
 
 void Handler::removeAllMessages() {
-    mLooper->removeAllMessages();
+    mLooper->removeAllMessages(shared_from_this());
 }
 } // namespace handler

@@ -24,6 +24,8 @@ public:
 
     friend class Handler;
 
+    friend class MessageQueue;
+
 public:
     std::int32_t what = 0;
     std::int32_t arg1 = 0;

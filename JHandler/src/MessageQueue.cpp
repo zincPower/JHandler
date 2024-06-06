@@ -5,7 +5,7 @@
 #include "MessageQueue.h"
 #include "Log.h"
 
-namespace jhandler{
+namespace jhandler {
 const std::string MessageQueue::TAG = "MessageQueue";
 
 MessageQueue::MessageQueue() { Log::i(TAG, "Create message queue."); }
@@ -40,11 +40,12 @@ std::unique_ptr<Message> MessageQueue::next() {
     }
 }
 
-void MessageQueue::removeMessage(int32_t what) {
+void MessageQueue::removeMessage(std::shared_ptr<Handler> handler, int32_t what) {
     std::unique_lock<std::mutex> lock(mMutex);
     Log::i(TAG, "MessageQueue remove message. what=", what);
     for (auto it = mQueue.begin(); it != mQueue.end();) {
-        if ((*it)->what == what) {
+        auto target = (*it)->mTarget.lock();
+        if ((*it)->what == what && (target && target.get() == handler.get())) {
             Log::i(TAG, "MessageQueue has been removed message. message=", **it);
             it = mQueue.erase(it);
             // 【Message 回收】 可以考虑将 message 回收
@@ -59,14 +60,22 @@ void MessageQueue::removeMessage(int32_t what) {
     //  }
 }
 
-void MessageQueue::removeAllMessages() {
+void MessageQueue::removeAllMessages(std::shared_ptr<Handler> handler) {
     std::unique_lock<std::mutex> lock(mMutex);
     Log::i(TAG, "MessageQueue remove all messages. Queue size=", mQueue.size());
-    mQueue.clear();
-    // 【Message 回收】可以考虑将 message 回收
+    for (auto it = mQueue.begin(); it != mQueue.end();) {
+        auto target = (*it)->mTarget.lock();
+        if ((target && target.get() == handler.get())) {
+            Log::i(TAG, "MessageQueue has been removed message. message=", **it);
+            it = mQueue.erase(it);
+            // 【Message 回收】 可以考虑将 message 回收
+        } else {
+            ++it;
+        }
+    }
 }
 
-void MessageQueue::reset(){
+void MessageQueue::reset() {
     mIsQuit = false;
 }
 
@@ -75,7 +84,7 @@ void MessageQueue::quit() {
     mThreadCond.notify_all();
 }
 
-bool MessageQueue::isQuit(){
+bool MessageQueue::isQuit() {
     return mIsQuit;
 }
 }

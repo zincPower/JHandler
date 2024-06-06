@@ -29,14 +29,14 @@ public:
 
     std::unique_ptr<Message> next();
 
-    void removeMessage(int32_t what);
+    void removeMessage(std::shared_ptr<Handler> handler, int32_t what);
 
-    void removeAllMessages();
+    void removeAllMessages(std::shared_ptr<Handler> handler);
 
     void reset();
-    
+
     void quit();
-    
+
     [[nodiscard]] bool isQuit();
 };
 }

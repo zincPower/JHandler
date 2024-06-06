@@ -13,7 +13,7 @@ namespace jhandler {
 class Looper {
 private:
     static const std::string TAG;
-    
+
     std::unique_ptr<MessageQueue> mQueue;
 public:
     static std::shared_ptr<Looper> create();
@@ -27,9 +27,9 @@ public:
 
     void enqueueMessage(std::unique_ptr<Message> message);
 
-    void removeMessage(int32_t what);
+    void removeMessage(std::shared_ptr<Handler> handler, int32_t what);
 
-    void removeAllMessages();
+    void removeAllMessages(std::shared_ptr<Handler> handler);
 
     Looper(const Looper &) = delete;
 
