@@ -5,5 +5,5 @@
 #include "Log.h"
 
 namespace jhandler {
-bool Log::isNeedShowLog = true;
+bool Log::isNeedShowLog = false;
 }
