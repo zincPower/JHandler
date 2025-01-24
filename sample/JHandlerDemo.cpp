@@ -1,7 +1,7 @@
 //
 // Created by 江澎涌 on 2024/4/19.
 //
-
+#include "JHandlerDemo.h"
 
 const std::string tag = "【main】";
 
@@ -27,7 +27,7 @@ void sendMessage(const std::shared_ptr<MyHandler> &myHandler, int count) {
 
 // 测试发送 message ，携带 what、arg1、arg2、data
 void sendWhatMessageDemo() {
-    JHandler::Log::i(tag, "====================== JHandler 开始运行 —— 运行 what message ======================");
+    JHandler::Log::i(tag, "====================== jhandler 开始运行 —— 运行 what message ======================");
 
     // 创建携带线程的 HandlerThread
     auto handlerThread = JHandler::HandlerThread();
@@ -51,12 +51,12 @@ void sendWhatMessageDemo() {
     // 等待线程运行完
     handlerThread.join();
 
-    JHandler::Log::i(tag, "====================== JHandler 正常结束 —— 运行 what message ======================");
+    JHandler::Log::i(tag, "====================== jhandler 正常结束 —— 运行 what message ======================");
 }
 
 // 测试移除 message
 void removeMessageDemo() {
-    JHandler::Log::i(tag, "====================== JHandler 开始运行 —— 运行移除 message ======================");
+    JHandler::Log::i(tag, "====================== jhandler 开始运行 —— 运行移除 message ======================");
 
     // 创建携带线程的 HandlerThread
     auto handlerThread = JHandler::HandlerThread();
@@ -80,13 +80,13 @@ void removeMessageDemo() {
     // 等待线程运行完
     handlerThread.join();
 
-    JHandler::Log::i(tag, "====================== JHandler 正常结束 —— 运行移除 message ======================");
+    JHandler::Log::i(tag, "====================== jhandler 正常结束 —— 运行移除 message ======================");
 }
 
 // 测试同时多个线程运行
 void multiHandlerDemo() {
     JHandler::Log::i(tag,
-                     "====================== JHandler 开始运行 —— 多 Handler 使用同一 Thread ======================");
+                     "====================== jhandler 开始运行 —— 多 Handler 使用同一 Thread ======================");
 
     // 创建携带线程的 HandlerThread
     auto handlerThread = JHandler::HandlerThread();
@@ -107,11 +107,11 @@ void multiHandlerDemo() {
     handlerThread.join();
 
     JHandler::Log::i(tag,
-                     "====================== JHandler 正常结束 —— 多 Handler 使用同一 Thread ======================");
+                     "====================== jhandler 正常结束 —— 多 Handler 使用同一 Thread ======================");
 }
 
 void multiThreadDemo() {
-    JHandler::Log::i(tag, "====================== JHandler 开始运行 —— 多 Thread ======================");
+    JHandler::Log::i(tag, "====================== jhandler 开始运行 —— 多 Thread ======================");
 
     // 创建携带线程的 HandlerThread
     auto handlerThread1 = JHandler::HandlerThread();
@@ -138,5 +138,5 @@ void multiThreadDemo() {
     handlerThread1.join();
     handlerThread2.join();
 
-    JHandler::Log::i(tag, "====================== JHandler 正常结束 —— 多 Thread ======================");
+    JHandler::Log::i(tag, "====================== jhandler 正常结束 —— 多 Thread ======================");
 }

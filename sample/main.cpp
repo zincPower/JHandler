@@ -7,7 +7,7 @@
 using namespace std;
 using namespace jhandler;
 
-static string TAG = "JHandler-Demo";
+static string TAG = "jhandler-Demo";
 
 int main() {
     jhandler::Log::isNeedShowLog = true;

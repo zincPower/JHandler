@@ -117,6 +117,9 @@ void simpleUse() {
     message->what = MSG_WILL_BE_REMOVED;
     firstHandler->sendMessage(std::move(message));
     this_thread::sleep_for(std::chrono::microseconds(50));
+    firstHandler->post([]() {
+        Log::i("Demo-simpleUse", "被移除的闭包", "Looper 线程 id=", this_thread::get_id());
+    });
     firstHandler->removeAllMessages();
 
     // 用同一个 Looper 创建多个 Handler ，可以分散处理逻辑
