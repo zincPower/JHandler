@@ -14,8 +14,20 @@ add_subdirectory(jhandler)
 add_executable(
         JHandler-Sample
         sample/main.cpp
-#        sample/JHandlerDemo.cpp
-        sample/simpleUse/SimpleUse.cpp
-        sample/diyThread/DiyThread.cpp
+        sample/common_use/common_use.cpp
+        sample/common_use/message_type.h
+        sample/common_use/common_use_handler.cpp
+        sample/common_use/second_common_use_handler.cpp
+
+#        sample/simpleUse/simple_use.cpp
+#        sample/simpleUse/message_type.h
+#        sample/simpleUse/my_first_handler.cpp
+#        sample/simpleUse/my_second_handler.cpp
+
+        #        sample/JHandlerDemo.cpp
+        #        sample/diyThread/my_handler.cpp
+        #        sample/diyThread/DiyThread.cpp
+        #        sample/diyThread/GLThread.cpp
+        #        sample/diyThread/GLHandler.cpp
 )
 target_link_libraries(JHandler-Sample PUBLIC jhandler)
