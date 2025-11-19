@@ -23,12 +23,9 @@ void Looper::loop() {
             Log::i(TAG, "Obtain a message.", *message);
             if (message->mCallback) {
                 message->mCallback();
-                // 【Message 回收】 可以考虑将 message 回收
             } else {
                 auto target = message->mTarget;
-                auto locked = target.lock();
-                if (locked) locked->handleMessage(message);
-                // 【Message 回收】 可以考虑将 message 回收
+                if (target) target->handleMessage(message);
             }
         } else if (mQueue->isQuit()) {
             Log::i(TAG, "Looper is stopped.");

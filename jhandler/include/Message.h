@@ -35,7 +35,7 @@ public:
 private:
     static const std::string TAG;
 
-    std::weak_ptr<Handler> mTarget = std::weak_ptr<Handler>();
+    std::shared_ptr<Handler> mTarget = std::shared_ptr<Handler>();
     std::function<void()> mCallback = nullptr;
     
 public:

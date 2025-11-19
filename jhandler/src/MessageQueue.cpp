@@ -8,9 +8,13 @@
 namespace jhandler {
 const std::string MessageQueue::TAG = "MessageQueue";
 
-MessageQueue::MessageQueue() { Log::i(TAG, "Create message queue."); }
+MessageQueue::MessageQueue() {
+    Log::i(TAG, "Create message queue.");
+}
 
-MessageQueue::~MessageQueue() { Log::i(TAG, "Delete message queue."); }
+MessageQueue::~MessageQueue() {
+    Log::i(TAG, "Delete message queue.");
+}
 
 void MessageQueue::enqueueMessage(std::unique_ptr<Message> message) {
     std::unique_lock<std::mutex> lock(mMutex);
@@ -44,11 +48,10 @@ void MessageQueue::removeMessage(std::shared_ptr<Handler> handler, int32_t what)
     std::unique_lock<std::mutex> lock(mMutex);
     Log::i(TAG, "MessageQueue remove message. what=", what);
     for (auto it = mQueue.begin(); it != mQueue.end();) {
-        auto target = (*it)->mTarget.lock();
+        auto target = (*it)->mTarget;
         if ((*it)->what == what && (target && target.get() == handler.get())) {
             Log::i(TAG, "MessageQueue has been removed message. message=", **it);
             it = mQueue.erase(it);
-            // 【Message 回收】 可以考虑将 message 回收
         } else {
             ++it;
         }
@@ -64,11 +67,10 @@ void MessageQueue::removeAllMessages(std::shared_ptr<Handler> handler) {
     std::unique_lock<std::mutex> lock(mMutex);
     Log::i(TAG, "MessageQueue remove all messages. Queue size=", mQueue.size());
     for (auto it = mQueue.begin(); it != mQueue.end();) {
-        auto target = (*it)->mTarget.lock();
+        auto target = (*it)->mTarget;
         if ((target && target.get() == handler.get())) {
             Log::i(TAG, "MessageQueue has been removed message. message=", **it);
             it = mQueue.erase(it);
-            // 【Message 回收】 可以考虑将 message 回收
         } else {
             ++it;
         }

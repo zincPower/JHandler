@@ -9,7 +9,6 @@ namespace jhandler{
 const std::string Handler::TAG = "Handler";
 
 std::unique_ptr<Message> Handler::obtainMessage() {
-    // 【Message 回收】 可以考虑从 MessageCachePool 中获取
     return Message::obtain();
 }
 

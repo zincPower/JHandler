@@ -27,13 +27,12 @@ void Message::reset() {
     arg1 = 0;
     arg2 = 0;
     data = nullptr;
-    mTarget = std::weak_ptr<Handler>();
+    mTarget = std::shared_ptr<Handler>();
     mCallback = nullptr;
 }
 
 void Message::recycle() {
     reset();
-    // 【Message 回收】 可以考虑将 message 回收
 }
 
 std::ostream &operator<<(std::ostream &os, const Message &msg) {

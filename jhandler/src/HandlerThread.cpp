@@ -43,7 +43,7 @@ std::shared_ptr<Looper> HandlerThread::getLooper() {
     return mLooper;
 }
 
-void HandlerThread::loop(std::shared_ptr<Looper> looper) {
+void HandlerThread::loop(const std::shared_ptr<Looper>& looper) {
     auto threadId = std::this_thread::get_id();
     Log::i(TAG, "Loop launch. Looper thread id=", threadId);
     looper->loop();

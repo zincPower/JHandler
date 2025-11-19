@@ -30,7 +30,7 @@ public:
 private:
     HandlerThread();
 
-    static void loop(std::shared_ptr<Looper> looper);
+    static void loop(const std::shared_ptr<Looper>& looper);
 };
 }
 
