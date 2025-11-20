@@ -7,12 +7,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(
         jhandler
         SHARED
-        src/Handler.cpp
-        src/HandlerThread.cpp
-        src/Looper.cpp
-        src/Message.cpp
-        src/MessageQueue.cpp
-        src/Log.cpp
+        src/handler.cpp
+        src/handler_thread.cpp
+        src/looper.cpp
+        src/message.cpp
+        src/message_queue.cpp
+        src/log.cpp
 )
 
 ## 编译

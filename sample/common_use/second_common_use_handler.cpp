@@ -3,7 +3,7 @@
 //
 
 #include "second_common_use_handler.h"
-#include "Log.h"
+#include <log.h>
 #include "message_type.h"
 
 std::string SecondCommonUseHandler::TAG = "SecondCommonUseHandler";

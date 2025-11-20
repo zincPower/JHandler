@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <thread>
-#include "Looper.h"
+#include "looper.h"
 
 namespace jhandler {
 class HandlerThread {

@@ -5,7 +5,7 @@
 #ifndef JHANDLER_SAMPLE_COMMONUSEHANDLER_H
 #define JHANDLER_SAMPLE_COMMONUSEHANDLER_H
 
-#include "Handler.h"
+#include "handler.h"
 
 class CommonUseHandler : public jhandler::Handler {
 private:

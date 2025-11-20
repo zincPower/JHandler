@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <atomic>
-#include "MessageQueue.h"
+#include "message_queue.h"
 
 namespace jhandler {
 class Looper {

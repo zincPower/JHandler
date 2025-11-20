@@ -2,9 +2,9 @@
 // Created by 江澎涌 on 2024/6/2.
 //
 
-#include "Looper.h"
-#include "Handler.h"
-#include "Log.h"
+#include "looper.h"
+#include "handler.h"
+#include "log.h"
 
 namespace jhandler {
 const std::string Looper::TAG = "Looper";

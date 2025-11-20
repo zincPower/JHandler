@@ -8,7 +8,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <list>
-#include "Message.h"
+#include "message.h"
 
 namespace jhandler {
 class MessageQueue {

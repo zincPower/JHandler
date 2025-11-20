@@ -2,23 +2,23 @@
 // Created by 江澎涌 on 2024/6/2.
 //
 
-#include "Message.h"
-#include "Log.h"
+#include "message.h"
+#include "log.h"
 
 namespace jhandler {
 const std::string Message::TAG = "Message";
 
 std::unique_ptr<Message> Message::obtain() {
-//    Log::i(TAG, "Obtain a message.");
+    Log::i(TAG, "Obtain a message.");
     return std::unique_ptr<Message>(new Message());
 }
 
 Message::Message() {
-//    Log::i(TAG, "Create message.");
+    Log::i(TAG, "Create message.");
 }
 
 Message::~Message() {
-//    Log::i(TAG, "Delete Message. message=", *this);
+    Log::i(TAG, "Delete Message. message=", *this);
     reset();
 }
 

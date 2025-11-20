@@ -2,11 +2,11 @@
 // Created by 江澎涌 on 2025/11/16.
 //
 
+#include "common_use.h"
 #include <string>
 #include <memory>
-#include "HandlerThread.h"
-#include "Log.h"
-#include "common_use.h"
+#include <handler_thread.h>
+#include <log.h>
 #include "common_use_handler.h"
 #include "second_common_use_handler.h"
 #include "message_type.h"

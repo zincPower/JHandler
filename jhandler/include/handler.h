@@ -7,8 +7,8 @@
 
 #include <memory>
 #include <functional>
-#include "Message.h"
-#include "Looper.h"
+#include "message.h"
+#include "looper.h"
 
 namespace jhandler {
 class Handler : public std::enable_shared_from_this<Handler> {
