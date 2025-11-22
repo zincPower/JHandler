@@ -5,8 +5,8 @@
 int main() {
     jhandler::Log::isNeedShowLog = false;
 
-    // 常规使用gein
-//    commonUse();
+    // 常规使用
+    commonUse();
 
     // 自定义线程
     threadUse();
