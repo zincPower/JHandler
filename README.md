@@ -225,11 +225,11 @@ csdn：https://blog.csdn.net/weixin_37625173
 
 公众号：微信搜索 "江澎涌" ，或扫描二维码
 
-![](https://github.com/zincPower/JHandler/tree/main/img/officialaccount.png)
+![](https://github.com/zincPower/JHandler/blob/main/img/officialaccount.png)
 
 ### 2、赞赏
 
 如果觉得 JHandler 对你有帮助或启发，请我喝杯水果茶吧 😄
 
-![](https://github.com/zincPower/JHandler/tree/main/img/alipay.png)
-![](https://github.com/zincPower/JHandler/tree/main/img/wxpay.jpg)
+![](https://github.com/zincPower/JHandler/blob/main/img/alipay.png)
+![](https://github.com/zincPower/JHandler/blob/main/img/wxpay.jpg)
