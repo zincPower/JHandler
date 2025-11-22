@@ -44,7 +44,7 @@ std::unique_ptr<Message> MessageQueue::next() {
     }
 }
 
-void MessageQueue::removeMessage(std::shared_ptr<Handler> handler, int32_t what) {
+void MessageQueue::removeMessage(const std::shared_ptr<Handler>& handler, int32_t what) {
     std::unique_lock<std::mutex> lock(mMutex);
     Log::i(TAG, "MessageQueue remove message. what=", what);
     for (auto it = mQueue.begin(); it != mQueue.end();) {
@@ -63,7 +63,7 @@ void MessageQueue::removeMessage(std::shared_ptr<Handler> handler, int32_t what)
     //  }
 }
 
-void MessageQueue::removeAllMessages(std::shared_ptr<Handler> handler) {
+void MessageQueue::removeAllMessages(const std::shared_ptr<Handler>& handler) {
     std::unique_lock<std::mutex> lock(mMutex);
     Log::i(TAG, "MessageQueue remove all messages. Queue size=", mQueue.size());
     for (auto it = mQueue.begin(); it != mQueue.end();) {

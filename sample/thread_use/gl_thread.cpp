@@ -13,10 +13,10 @@ bool GLThread::isRunning() {
 
 bool GLThread::start() {
     if (mIsRunning) {
-        Log::e(TAG, "GLThread is running. Can't start again.");
+        Log::e(TAG, "GLThread 已经启动，不在进行启动 thread id=", std::this_thread::get_id());
         return false;
     } else {
-        Log::i(TAG, "GLThread start.");
+        Log::i(TAG, "GLThread 启动 thread id=", std::this_thread::get_id());
         mIsRunning = true;
         mThread = std::thread(&loop, shared_from_this());
         return true;
@@ -24,7 +24,7 @@ bool GLThread::start() {
 }
 
 void GLThread::quit() {
-    Log::i(TAG, "Quit GLThread. mIsRunning=", mIsRunning ? "true" : "false");
+    Log::i(TAG, "退出 GLThread. mIsRunning=", mIsRunning ? "true" : "false", " thread id=", std::this_thread::get_id());
     if (mIsRunning) mLooper->quit();
     // 避免 thread 游离导致退出时崩溃
     if (mThread.joinable()) mThread.detach();
@@ -34,49 +34,53 @@ std::shared_ptr<jhandler::Looper> GLThread::getLooper() {
     return mLooper;
 }
 
+std::shared_ptr<GLHandler> GLThread::getHandler() {
+    return mHandler;
+}
+
 void GLThread::waitUntilReady() {
     std::unique_lock<std::mutex> lock(mReadyMutex);
     mReadyCond.wait(lock, [self = shared_from_this()]() { return self->mIsThreadReady.load(); });
 }
 
 void GLThread::loop(const std::shared_ptr<GLThread> &glThread) {
-    Log::i(TAG, "------------------------ Enter GLThread. Start GL init logic. ------------------------");
-    Log::i(TAG, "GLThread id=", std::this_thread::get_id());
+    Log::i(TAG, "------------------------ 进入 GLThread 启动 GL 逻辑 ------------------------ thread id=", std::this_thread::get_id());
 
-    Log::i(TAG, "------------------------ 创建 EGL 相关环境 ------------------------");
+    Log::i(TAG, "------------------------ 模拟创建 EGL 相关环境 ------------------------ thread id=", std::this_thread::get_id());
+    // 睡眠了 500 毫秒，模拟创建 EGL
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     glThread->mLooper = jhandler::Looper::create();
     glThread->mHandler = std::make_shared<GLHandler>(glThread->mLooper);
 
-    // 用于等待 EGL、Looper、Handler 的创建完成
+    // 用于等待 EGL、Looper 的创建完成
     {
         std::unique_lock<std::mutex> lock(glThread->mReadyMutex);
         glThread->mIsThreadReady = true;
         glThread->mReadyCond.notify_all();
     }
 
-    Log::i(TAG, "------------------------ 进入事件循环 ------------------------");
+    Log::i(TAG, "------------------------ 进入事件循环 ------------------------ thread id=", std::this_thread::get_id());
     glThread->mLooper->loop();
-    Log::i(TAG, "------------------------ 退出事件循环 ------------------------");
+    Log::i(TAG, "------------------------ 退出事件循环 ------------------------ thread id=", std::this_thread::get_id());
 
-    Log::i(TAG, "------------------------ 开始释放资源 ------------------------");
+    Log::i(TAG, "------------------------ 开始释放资源 ------------------------ thread id=", std::this_thread::get_id());
 
+    Log::i(TAG, "------------------------ 释放 EGL ------------------------ thread id=", std::this_thread::get_id());
 
-    Log::i(TAG, "------------------------ 释放 EGL ------------------------ ");
-
-    Log::i(TAG, "------------------------ 释放 Handler ------------------------ ");
+    Log::i(TAG, "------------------------ 释放 Handler ------------------------ thread id=", std::this_thread::get_id());
     glThread->mHandler->removeAllMessages();
     glThread->mHandler = nullptr;
 
     Log::i(TAG, "释放 Looper");
     glThread->mLooper = nullptr;
     quitLoop(glThread);
-    Log::i(TAG, "------------------------ 退出 GLThread 线程 ------------------------");
+    Log::i(TAG, "------------------------ 退出 GLThread 线程 ------------------------ thread id=", std::this_thread::get_id());
 }
 
 void GLThread::quitLoop(const std::shared_ptr<GLThread> &glThread) {
     std::unique_lock<std::mutex> lock(glThread->mReadyMutex);
-    Log::i(TAG, "Loop quit.");
+    Log::i(TAG, "Loop 退出");
     glThread->mIsRunning = false;
     glThread->mIsThreadReady = false;
     glThread->mReadyCond.notify_all();

@@ -21,6 +21,7 @@ add_executable(
         sample/thread_use/thread_use.cpp
         sample/thread_use/gl_thread.cpp
         sample/thread_use/gl_handler.cpp
+        sample/thread_use/business_handler.cpp
         sample/log/log.h
 )
 target_link_libraries(JHandler-Sample PUBLIC jhandler)

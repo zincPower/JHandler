@@ -34,10 +34,12 @@ public:
 
     std::shared_ptr<jhandler::Looper> getLooper();
 
+    std::shared_ptr<GLHandler> getHandler();
+
     void waitUntilReady();
 
 private:
-    static void loop(const std::shared_ptr<GLThread> &glThread) ;
+    static void loop(const std::shared_ptr<GLThread> &glThread);
 
     static void quitLoop(const std::shared_ptr<GLThread> &glThread);
 };

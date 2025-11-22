@@ -74,6 +74,10 @@ void removeAllMessage() {
     auto looper = handlerThread->getLooper();
     auto handler = std::make_shared<FirstCommonUseHandler>(looper);
 
+    auto name = "江澎涌";
+    handler->post([name]() {
+        Log::i(TAG, "【runClosure】闭包移除 name=", name, " Looper 线程 id=", std::this_thread::get_id());
+    });
     auto message = jhandler::Message::obtain();
     message->what = SAY_HI;
     message->data = std::make_shared<std::string>("江澎涌");
@@ -103,11 +107,15 @@ void multiHandler() {
     auto message = jhandler::Message::obtain();
     message->what = SAY_HI;
     message->data = std::make_shared<std::string>("江澎涌");
+    message->arg1 = 1994;
+    message->arg2 = 170;
     handler1->sendMessage(std::move(message));
 
     message = jhandler::Message::obtain();
     message->what = SAY_HI;
     message->data = std::make_shared<std::string>("jiang peng yong");
+    message->arg1 = 2025;
+    message->arg2 = 100;
     handler2->sendMessage(std::move(message));
 
     // handler 之间的移除消息不相互影响

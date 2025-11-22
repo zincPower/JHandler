@@ -29,9 +29,9 @@ public:
 
     std::unique_ptr<Message> next();
 
-    void removeMessage(std::shared_ptr<Handler> handler, int32_t what);
+    void removeMessage(const std::shared_ptr<Handler>& handler, int32_t what);
 
-    void removeAllMessages(std::shared_ptr<Handler> handler);
+    void removeAllMessages(const std::shared_ptr<Handler>& handler);
 
     void reset();
 
