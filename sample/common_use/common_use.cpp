@@ -142,5 +142,6 @@ void commonUse() {
 
     multiHandler();
 
+    // 为了让内部执行外，才结束运行
     std::this_thread::sleep_for(std::chrono::seconds(1));
 }

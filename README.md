@@ -160,8 +160,8 @@ handler2->sendMessage(std::move(message));
 
 在自定义线程中，按照如下步骤进行：
 1. 增加 egl 的创建，通过 `jhandler::Looper::create()` 创建 `Looper` ，然后创建内部的 Handler 用于处理后续的相机帧、滤镜管理等。
-2. 进入 Looper 事件循环，直到外部调用 quit 。
-3. 释放和回收 egl 相关资源
+2. 调用 `Looper::loop()` 方法，进入事件循环，直到外部调用 `Looper::quit()` 终止事件循环。
+3. 释放和回收 egl 相关资源。
 
 ```cpp
 void GLThread::loop(const std::shared_ptr<GLThread> &glThread) {
@@ -171,22 +171,12 @@ void GLThread::loop(const std::shared_ptr<GLThread> &glThread) {
     // 睡眠了 500 毫秒，模拟创建 EGL
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-    glThread->mLooper = jhandler::Looper::create();
-    glThread->mHandler = std::make_shared<GLHandler>(glThread->mLooper);
-
-    // 用于等待 EGL、Looper 的创建完成
-    {
-        std::unique_lock<std::mutex> lock(glThread->mReadyMutex);
-        glThread->mIsThreadReady = true;
-        glThread->mReadyCond.notify_all();
-    }
-
     Log::i(TAG, "------------------------ 进入事件循环 ------------------------ thread id=", std::this_thread::get_id());
     glThread->mLooper->loop();
     Log::i(TAG, "------------------------ 退出事件循环 ------------------------ thread id=", std::this_thread::get_id());
 
     Log::i(TAG, "------------------------ 开始释放资源 ------------------------ thread id=", std::this_thread::get_id());
-    
+
     Log::i(TAG, "------------------------ 释放 EGL ------------------------ thread id=", std::this_thread::get_id());
 
     Log::i(TAG, "------------------------ 释放 Handler ------------------------ thread id=", std::this_thread::get_id());
@@ -200,57 +190,32 @@ void GLThread::loop(const std::shared_ptr<GLThread> &glThread) {
 }
 ```
 
-在需要使用事件循环的线程中使用 `Looper::create` 创建 `Looper` 并调用 `loop` 启动，`Looper` 会对放入的消息和闭包按照顺序执行。
-
-**自定义线程中使用以下代码：**
+同样也支持多个 Handler 解耦逻辑，通过获取内部的 `Looper` 创建对应的 `Handler` 即可。
 
 ```cpp
-// 在自行创建的线程中，创建 Looper
-mLooper = Looper::create();
+void threadUse() {
+    auto glThread = std::make_shared<GLThread>();
+    glThread->start();
 
-// 启动 Looper 进入循环处理
-mLooper->loop();
-```
+    // 创建业务需要的 handler ，可以不耦合 gl 的相关流程
+    auto businessHandler = std::make_shared<BusinessHandler>(glThread->getLooper());
+    businessHandler->sayHello();
 
-调用 `Looper->loop()` 方法之后，自定义线程会进入循环处理状态，当其他线程调用 `Looper->quit()` 方法才会终止循环处理。
+    auto glHandler = glThread->getHandler();
+    glHandler->addFilter();
+    glHandler->requestRender();
+    glHandler->removeFilter();
 
-**其他线程中使用以下代码进行停止轮询：**
+    businessHandler->sayHello();
 
-```cpp
-mLooper->quit();
-```
+    glThread->quit();
 
-
-
-
-
-
-
-
-
-使用和常规使用大致相同，只是启动后需要等待内部的 EGL 、Looper 启动完成，同样也支持多个 Handler 解耦逻辑。
-
-```cpp
-auto glThread = std::make_shared<GLThread>();
-if (glThread->start()) {
-    glThread->waitUntilReady();
+    // 为了让内部执行外，才结束运行。
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 }
-
-// 创建业务需要的 handler ，可以不耦合 gl 的相关流程
-auto businessHandler = std::make_shared<BusinessHandler>(glThread->getLooper());
-businessHandler->sayHello();
-
-auto glHandler = glThread->getHandler();
-glHandler->addFilter();
-glHandler->requestRender();
-glHandler->removeFilter();
-
-businessHandler->sayHello();
-
-glThread->quit();
 ```
 
-## 作者简介
+## 六、作者简介
 
 ### 1、个人博客
 

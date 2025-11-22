@@ -9,9 +9,7 @@
 
 void threadUse() {
     auto glThread = std::make_shared<GLThread>();
-    if (glThread->start()) {
-        glThread->waitUntilReady();
-    }
+    glThread->start();
 
     // 创建业务需要的 handler ，可以不耦合 gl 的相关流程
     auto businessHandler = std::make_shared<BusinessHandler>(glThread->getLooper());
@@ -26,5 +24,6 @@ void threadUse() {
 
     glThread->quit();
 
+    // 为了让内部执行外，才结束运行。
     std::this_thread::sleep_for(std::chrono::seconds(1));
 }

@@ -16,16 +16,15 @@ private:
     // 是否已经启动
     std::atomic<bool> mIsRunning = false;
 
-    // 是否已经准备好环境
-    std::atomic<bool> mIsThreadReady = false;
-    std::mutex mReadyMutex{};
-    std::condition_variable mReadyCond{};
-
     std::thread mThread;
     std::shared_ptr<jhandler::Looper> mLooper = nullptr;
     std::shared_ptr<GLHandler> mHandler = nullptr;
 
 public:
+    GLThread();
+
+    ~GLThread();
+
     bool isRunning();
 
     bool start();
@@ -35,8 +34,6 @@ public:
     std::shared_ptr<jhandler::Looper> getLooper();
 
     std::shared_ptr<GLHandler> getHandler();
-
-    void waitUntilReady();
 
 private:
     static void loop(const std::shared_ptr<GLThread> &glThread);
