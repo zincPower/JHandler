@@ -3,6 +3,7 @@
 //
 
 #include "message.h"
+#include <iostream>
 #include "log.h"
 
 namespace jhandler {

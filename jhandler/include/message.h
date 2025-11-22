@@ -7,7 +7,6 @@
 
 #include <memory>
 #include <functional>
-#include <iostream>
 
 namespace jhandler {
 class Handler;

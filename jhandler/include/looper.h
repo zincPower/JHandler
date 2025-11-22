@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <atomic>
-#include "message_queue.h"
+#include "../src/message_queue.h"
 
 namespace jhandler {
 class Looper {
@@ -17,9 +17,6 @@ private:
     std::unique_ptr<MessageQueue> mQueue;
 public:
     static std::shared_ptr<Looper> create();
-
-    // android 中，是为了让 Looper 和当前线程绑定，这里暂不考虑，所以可以先不用
-    // void prepare();
 
     void loop();
 

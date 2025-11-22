@@ -46,7 +46,7 @@ void Looper::quit() {
 }
 
 void Looper::enqueueMessage(std::unique_ptr<Message> message) {
-//    Log::i(TAG, "Enqueue a message.", *message);
+    Log::i(TAG, "Enqueue a message.", *message);
     mQueue->enqueueMessage(std::move(message));
 }
 
