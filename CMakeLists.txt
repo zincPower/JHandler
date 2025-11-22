@@ -16,18 +16,11 @@ add_executable(
         sample/main.cpp
         sample/common_use/common_use.cpp
         sample/common_use/message_type.h
-        sample/common_use/common_use_handler.cpp
+        sample/common_use/first_common_use_handler.cpp
         sample/common_use/second_common_use_handler.cpp
-
-#        sample/simpleUse/simple_use.cpp
-#        sample/simpleUse/message_type.h
-#        sample/simpleUse/my_first_handler.cpp
-#        sample/simpleUse/my_second_handler.cpp
-
-        #        sample/JHandlerDemo.cpp
-        #        sample/diyThread/my_handler.cpp
-        #        sample/diyThread/DiyThread.cpp
-        #        sample/diyThread/GLThread.cpp
-        #        sample/diyThread/GLHandler.cpp
+        sample/thread_use/thread_use.cpp
+        sample/thread_use/gl_thread.cpp
+        sample/thread_use/gl_handler.cpp
+        sample/log/log.h
 )
 target_link_libraries(JHandler-Sample PUBLIC jhandler)

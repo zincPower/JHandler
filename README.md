@@ -106,11 +106,11 @@ handler->removeAllMessages();
 static constexpr int SAY_HI = 10000;
 
 // 定义 Handler
-class CommonUseHandler : public jhandler::Handler {
+class FirstCommonUseHandler : public jhandler::Handler {
 private:
     static std::string TAG;
 public:
-    explicit CommonUseHandler(std::shared_ptr<jhandler::Looper> looper) {}
+    explicit FirstCommonUseHandler(std::shared_ptr<jhandler::Looper> looper) {}
     void handleMessage(const std::unique_ptr<jhandler::Message> &message) override{
         // 此处接收 Message 编写自己的业务逻辑
         switch (message->what) {
@@ -130,7 +130,7 @@ handlerThread->start();
 // 获取 Looper
 auto looper = handlerThread->getLooper();
 // 创建自己的 Handler
-auto handler = std::make_shared<CommonUseHandler>(looper);
+auto handler = std::make_shared<FirstCommonUseHandler>(looper);
 // 事件消息传递
 auto message = jhandler::Message::obtain();
 message->what = SAY_HI;
@@ -150,7 +150,7 @@ handlerThread->start();
 
 auto looper = handlerThread->getLooper();
 // 创建两个 Handler
-auto handler1 = std::make_shared<CommonUseHandler>(looper);
+auto handler1 = std::make_shared<FirstCommonUseHandler>(looper);
 auto handler2 = std::make_shared<SecondCommonUseHandler>(looper);
 
 // 向 handler1 发送 SAY_HI 类型的 message ，由 handler1 进行处理 
@@ -166,10 +166,10 @@ message->data = std::make_shared<std::string>("jiang peng yong");
 handler2->sendMessage(std::move(message));
 
 // 会看到以下输出，虽然是同一类型消息，但由不同 Handler 进行处理，并且线程是相同的且按顺序执行
-//【CommonUseHandler】 【addMessage】处理事件消息 name=江澎涌 Looper 线程 id=0x700007d2d000
+//【FirstCommonUseHandler】 【addMessage】处理事件消息 name=江澎涌 Looper 线程 id=0x700007d2d000
 //【SecondCommonUseHandler】 【addMessage】处理事件消息 name=jiang peng yong Looper 线程 id=0x700007d2d000
 ```
 
-> `CommonUseHandler` 和 `SecondCommonUseHandler` 请查看源码不再赘述。
+> `FirstCommonUseHandler` 和 `SecondCommonUseHandler` 请查看源码不再赘述。
 
 ##

@@ -1,22 +1,22 @@
 //
-// Created by 江澎涌 on 2025/11/18.
+// Created by 江澎涌 on 2025/11/17.
 //
 
-#include "second_common_use_handler.h"
+#include "first_common_use_handler.h"
 #include "../log/log.h"
 #include "message_type.h"
 
-std::string SecondCommonUseHandler::TAG = "SecondCommonUseHandler";
+std::string FirstCommonUseHandler::TAG = "FirstCommonUseHandler";
 
-SecondCommonUseHandler::SecondCommonUseHandler(std::shared_ptr<jhandler::Looper> looper) : Handler(looper) {}
+FirstCommonUseHandler::FirstCommonUseHandler(std::shared_ptr<jhandler::Looper> looper) : Handler(looper) {}
 
-void SecondCommonUseHandler::handleMessage(const std::unique_ptr<jhandler::Message> &message) {
+void FirstCommonUseHandler::handleMessage(const std::unique_ptr<jhandler::Message> &message) {
     switch (message->what) {
         case SAY_HI: {
-            auto name = std::static_pointer_cast<std::string>(message->data);
+            auto name = message->getData<std::string>();
             auto year = message->arg1;
             auto height = message->arg2;
-            Log::i(TAG, "【handleMessage】hello, ", *name, "(", year, ",", height, ")", " Looper 线程 id=", std::this_thread::get_id());
+            Log::i(TAG, "【handleMessage】你好，", *name, "(", year, ",", height, ")", " Looper 线程 id=", std::this_thread::get_id());
             break;
         }
         case SHOW_DESCRIPTION: {

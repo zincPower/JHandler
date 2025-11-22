@@ -6,8 +6,8 @@
 #include <string>
 #include <memory>
 #include <handler_thread.h>
-#include <log.h>
-#include "common_use_handler.h"
+#include "../log/log.h"
+#include "first_common_use_handler.h"
 #include "second_common_use_handler.h"
 #include "message_type.h"
 
@@ -19,11 +19,11 @@ void runClosure() {
     handlerThread->start();
 
     auto looper = handlerThread->getLooper();
-    auto handler = std::make_shared<CommonUseHandler>(looper);
+    auto handler = std::make_shared<FirstCommonUseHandler>(looper);
 
     auto name = "江澎涌";
     handler->post([name]() {
-        jhandler::Log::i(TAG, "【runClosure】运行闭包 name=", name, " Looper 线程 id=", std::this_thread::get_id());
+        Log::i(TAG, "【runClosure】运行闭包 name=", name, " Looper 线程 id=", std::this_thread::get_id());
     });
 
     handlerThread->quit();
@@ -35,11 +35,17 @@ void addMessage() {
     handlerThread->start();
 
     auto looper = handlerThread->getLooper();
-    auto handler = std::make_shared<CommonUseHandler>(looper);
+    auto handler = std::make_shared<FirstCommonUseHandler>(looper);
 
     auto message = jhandler::Message::obtain();
     message->what = SAY_HI;
     message->data = std::make_shared<std::string>("江澎涌");
+    message->arg1 = 1994;
+    message->arg2 = 170;
+    handler->sendMessage(std::move(message));
+
+    message = jhandler::Message::obtain();
+    message->what = SHOW_DESCRIPTION;
     handler->sendMessage(std::move(message));
 
     handlerThread->quit();
@@ -51,12 +57,11 @@ void removeSingleMessage() {
     handlerThread->start();
 
     auto looper = handlerThread->getLooper();
-    auto handler = std::make_shared<CommonUseHandler>(looper);
+    auto handler = std::make_shared<FirstCommonUseHandler>(looper);
 
     auto message = jhandler::Message::obtain();
-    message->what = SAY_HI;
-    message->data = std::make_shared<std::string>("江澎涌");
-    handler->removeMessage(SAY_HI);
+    message->what = REMOVE_MESSAGE;
+    handler->removeMessage(REMOVE_MESSAGE);
 
     handlerThread->quit();
 }
@@ -67,15 +72,19 @@ void removeAllMessage() {
     handlerThread->start();
 
     auto looper = handlerThread->getLooper();
-    auto handler = std::make_shared<CommonUseHandler>(looper);
+    auto handler = std::make_shared<FirstCommonUseHandler>(looper);
 
     auto message = jhandler::Message::obtain();
     message->what = SAY_HI;
     message->data = std::make_shared<std::string>("江澎涌");
+    message->arg1 = 1994;
+    message->arg2 = 170;
     handler->sendMessage(std::move(message));
     message = jhandler::Message::obtain();
     message->what = SAY_HI;
     message->data = std::make_shared<std::string>("jiang peng yong");
+    message->arg1 = 2025;
+    message->arg2 = 100;
     handler->sendMessage(std::move(message));
 
     handler->removeAllMessages();
@@ -88,7 +97,7 @@ void multiHandler() {
     handlerThread->start();
 
     auto looper = handlerThread->getLooper();
-    auto handler1 = std::make_shared<CommonUseHandler>(looper);
+    auto handler1 = std::make_shared<FirstCommonUseHandler>(looper);
     auto handler2 = std::make_shared<SecondCommonUseHandler>(looper);
 
     auto message = jhandler::Message::obtain();
@@ -100,6 +109,18 @@ void multiHandler() {
     message->what = SAY_HI;
     message->data = std::make_shared<std::string>("jiang peng yong");
     handler2->sendMessage(std::move(message));
+
+    // handler 之间的移除消息不相互影响
+    message = jhandler::Message::obtain();
+    message->what = REMOVE_MESSAGE;
+    handler1->sendMessage(std::move(message));
+    message = jhandler::Message::obtain();
+    message->what = REMOVE_MESSAGE;
+    handler2->sendMessage(std::move(message));
+    // 移除 handler1 what=REMOVE_MESSAGE 的消息，handler2 的消息还是会继续运行
+    handler1->removeMessage(REMOVE_MESSAGE);
+    // 移除 handler1 所有的消息，handler2 的消息会继续运行
+    handler1->removeAllMessages();
 
     handlerThread->quit();
 }
@@ -113,5 +134,5 @@ void commonUse() {
 
     multiHandler();
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 }
