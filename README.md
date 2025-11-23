@@ -2,6 +2,8 @@
 
 **JHandler 是一套 C++ 的事件循环机制。** 可在自行创建的线程中使用，也可以使用 JHandler 已封装好的独立线程处理事件。
 
+![](https://github.com/zincPower/JHandler/blob/main/img/structure.png)
+
 ## 一、集成
 
 将项目中 `jhandler` 文件夹拷贝添加到项目中，并在项目的 `CMakeLists.txt` 中添加以下配置即可：
