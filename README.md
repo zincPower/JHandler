@@ -44,6 +44,9 @@ auto name = "江澎涌";
 handler->post([name]() {
 jhandler::Log::i(TAG, "【runClosure】运行闭包 name=", name, " Looper 线程 id=", std::this_thread::get_id());
 });
+
+// 输出
+// 【CommonUse】 【runClosure】运行闭包 name=江澎涌 Looper 线程 id=0x700000339000
 ```
 
 **事件消息 Message：** 调用 `Handler->sendMessage(std::unique_ptr<Message> message)` 方法放入事件消息。
@@ -55,6 +58,9 @@ message->data = std::make_shared<std::string>("江澎涌"); // 事件数据
 message->arg1 = 1994;
 message->arg2 = 170;
 handler->sendMessage(std::move(message));               // 放入事件消息
+
+// 输出
+// 【FirstCommonUseHandler】 【handleMessage】你好，江澎涌(1994,170) Looper 线程 id=0x70000589c000
 ```
 
 > 如何处理事件消息，请查看 **“自定义事件处理的 Handler”** 小节。
@@ -93,8 +99,14 @@ public:
         // 此处接收 Message 编写自己的业务逻辑
         switch (message->what) {
             case SAY_HI: {
-                auto name = std::static_pointer_cast<std::string>(message->data);
-                jhandler::Log::i(TAG, "【handleMessage】处理事件消息 name=", *name, " Looper 线程 id=", std::this_thread::get_id());
+                auto name = message->getData<std::string>();
+                auto year = message->arg1;
+                auto height = message->arg2;
+                Log::i(TAG, "【handleMessage】你好，", *name, "(", year, ",", height, ")", " Looper 线程 id=", std::this_thread::get_id());
+                break;
+            }
+            case SHOW_DESCRIPTION: {
+                Log::i(TAG, "【handleMessage】我是一个 C++ 事件循环机制 Looper 线程 id=", std::this_thread::get_id());
                 break;
             }
         }
@@ -113,7 +125,17 @@ auto handler = std::make_shared<FirstCommonUseHandler>(looper);
 auto message = jhandler::Message::obtain();
 message->what = SAY_HI;
 message->data = std::make_shared<std::string>("江澎涌");
+message->arg1 = 1994;
+message->arg2 = 170;
 handler->sendMessage(std::move(message));
+
+message = jhandler::Message::obtain();
+message->what = SHOW_DESCRIPTION;
+handler->sendMessage(std::move(message));
+
+// 输出 
+// 【FirstCommonUseHandler】 【handleMessage】你好，江澎涌(1994,170) Looper 线程 id=0x70000589c000
+// 【FirstCommonUseHandler】 【handleMessage】我是一个 C++ 事件循环机制 Looper 线程 id=0x70000589c000
 ```
 
 ### 5、多个 Handler 解耦逻辑
@@ -135,17 +157,21 @@ auto handler2 = std::make_shared<SecondCommonUseHandler>(looper);
 auto message = jhandler::Message::obtain();
 message->what = SAY_HI;
 message->data = std::make_shared<std::string>("江澎涌");
+message->arg1 = 1994;
+message->arg2 = 170;
 handler1->sendMessage(std::move(message));
 
 // 向 handler2 发送 SAY_HI 类型的 message ，由 handler2 进行处理 
 message = jhandler::Message::obtain();
 message->what = SAY_HI;
 message->data = std::make_shared<std::string>("jiang peng yong");
+message->arg1 = 2025;
+message->arg2 = 100;
 handler2->sendMessage(std::move(message));
 
 // 会看到以下输出，虽然是同一类型消息，但由不同 Handler 进行处理，并且线程是相同的且按顺序执行
-//【FirstCommonUseHandler】 【addMessage】处理事件消息 name=江澎涌 Looper 线程 id=0x700007d2d000
-//【SecondCommonUseHandler】 【addMessage】处理事件消息 name=jiang peng yong Looper 线程 id=0x700007d2d000
+//【FirstCommonUseHandler】 【handleMessage】你好，江澎涌(1994,170) Looper 线程 id=0x700009ae3000
+//【SecondCommonUseHandler】 【handleMessage】hello, jiang peng yong(2025,100) Looper 线程 id=0x700009ae3000
 ```
 
 > `FirstCommonUseHandler` 和 `SecondCommonUseHandler` 请查看源码不再赘述。
@@ -158,7 +184,8 @@ handler2->sendMessage(std::move(message));
 
 > 完整代码可以查看 `thread_use.cpp`
 
-在自定义线程中，按照如下步骤进行：
+**在自定义线程中，按照如下步骤进行：**
+
 1. 增加 egl 的创建，通过 `jhandler::Looper::create()` 创建 `Looper` ，然后创建内部的 Handler 用于处理后续的相机帧、滤镜管理等。
 2. 调用 `Looper::loop()` 方法，进入事件循环，直到外部调用 `Looper::quit()` 终止事件循环。
 3. 释放和回收 egl 相关资源。
@@ -210,8 +237,14 @@ void threadUse() {
 
     glThread->quit();
 
-    // 为了让内部执行外，才结束运行。
+    // 为了让内部执行外，才结束整个项目运行。
     std::this_thread::sleep_for(std::chrono::seconds(1));
+    
+    // 输出
+    // 【GLHandler】 添加滤镜 filterName=0x600002314048 thread id=0x700009ae3000
+    // 【GLHandler】 进行渲染 thread id=0x700009ae3000
+    // 【GLHandler】 移除滤镜 filterName=0x600002314078 thread id=0x700009ae3000
+    // 【BusinessHandler】 你好 thread id=0x700009ae3000
 }
 ```
 

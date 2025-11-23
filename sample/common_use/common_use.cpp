@@ -128,7 +128,7 @@ void multiHandler() {
     // 移除 handler1 what=REMOVE_MESSAGE 的消息，handler2 的消息还是会继续运行
     handler1->removeMessage(REMOVE_MESSAGE);
     // 移除 handler1 所有的消息，handler2 的消息会继续运行
-    handler1->removeAllMessages();
+//    handler1->removeAllMessages();
 
     handlerThread->quit();
 }
